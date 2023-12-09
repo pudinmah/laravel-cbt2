@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('soals', function (Blueprint $table) {
             $table->id();
-            $table->string('pertanyaann');
+            $table->string('pertanyaan');
             $table->string('kategori');
-            $table->string('pilihan_a');
-            $table->string('pilihan_b');
-            $table->string('pilihan_c');
-            $table->string('pilihan_d');
+            $table->string('jawaban_a');
+            $table->string('jawaban_b');
+            $table->string('jawaban_c');
+            $table->string('jawaban_d');
             // user_id foreign key
             $table->enum('kunci',['a','b','c','d']);
             $table->timestamps();

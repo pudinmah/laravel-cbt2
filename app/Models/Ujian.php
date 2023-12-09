@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Soal extends Model
+class Ujian extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        "pertanyaan","kategori","jawaban_a","jawaban_b","jawaban_c","jawaban_d","kunci",
+        'user_id',
+        'nilai_angka',
+        'nilai_verbal',
+        'nilai_logika',
+        'hasil',
     ];
 }

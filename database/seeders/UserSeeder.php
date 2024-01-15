@@ -13,17 +13,14 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // STATIC
         \App\Models\User::factory(10)->create();
 
-        // DINAMIC
-        \App\Models\User::Create([
-            "name"=> "Admin Mahpudin",
-            "email"=> "pudinmah4@gmail.com",
-            "password"=> Hash::make("12345678"),
-            "roles"=> "ADMIN",
-            "phone"=> "085155288364",
+        \App\Models\User::create([
+            'name'=>'Mahpudin',
+            'email'=>'mahpudin@gmail.com',
+            'password'=>Hash::make('12341234'),
+            'roles'=>'ADMIN',
+            'phone'=>'085155288634',
         ]);
-
     }
 }

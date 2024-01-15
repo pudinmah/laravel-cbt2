@@ -12,65 +12,71 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $validateData = $request->validate([
-            'name' => 'required|max:55',
-            'email' => 'email|required|unique:users',
-            'password' => 'required',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'name' => 'required|max:55',
+                'email' => 'email|required|unique:users',
+                'password' => 'required',
+            ]
+        );
 
-        $user = User::create([
-            'name'=> $validateData['name'],
-            'email'=> $validateData['email'],
-            'password'=> Hash::make($validateData['password']),
-            'role'=> 'user',
-
-        ]);
+        $user = User::create(
+            [
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'role' => 'user',
+            ]
+        );
 
         $token = $user->createToken('auth_token')->plainTextToken;
-        return response()->json([
-            'access_token'=>$token,
-            'user'=>UserResource::make($user),
-        ]);
-
-
+        return response()->json(
+            [
+                'access_token' => $token,
+                'user' => UserResource::make($user),
+            ]
+        );
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $loginData = $request->validate([
             'email'=> 'email|required',
             'password'=> 'required',
         ]);
 
-        $user = User::where('email',$loginData['email'])->first();
+        $user = User::where('email', $loginData['email'])->first();
 
-        // cek !user
-        if(!$user){
+        // cek email
+        if(!$user)
+        {
             return response()->json([
-                'message'=>'User not found'
+                'message' => 'User not found'
+            ], 401);
+        }
+
+        // cek password
+        if(!Hash::check($loginData['password'], $user->password))
+        {
+            return response()->json([
+                'message'=> 'Invalid credentials | password salah'
             ],401);
         }
 
-        // cek !password
-        if(!Hash::check($loginData['password'], $user->password)){
-            return response()->json([
-                'message'=>'Invalid credentials'
-            ], 401);
-        }
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'access_token'=>$token,
-            'user'=>UserResource::make($user),
+            'access_token' => $token,
+            'user' => UserResource::make($user),
         ]);
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message'=>'Logout success'
+            'message'=> 'Logout Success'
         ]);
     }
-
-
 }

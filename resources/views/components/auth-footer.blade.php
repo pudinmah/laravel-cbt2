@@ -1,3 +1,3 @@
   <div class="simple-footer">
-      Copyright &copy; FIC BATCH 10
+      Copyright &copy; FIC Batch 10
   </div>

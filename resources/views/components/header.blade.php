@@ -263,12 +263,13 @@
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="#"
-                    class="dropdown-item has-icon text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit()">
-                    <i class="fas fa-sign-out-alt" "></i> Logout
+                    class="dropdown-item has-icon text-danger"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit()"
+                    >
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
-                <form action="{{route('logout')}}" id="logout-form" class="d-none" method="post">
+                <form id="logout-form" action="{{route('logout')}}" method="post">
                 @csrf
-
                 </form>
             </div>
         </li>

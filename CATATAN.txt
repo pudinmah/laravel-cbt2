@@ -1,0 +1,32 @@
+php artsan make:migration
+add_phone_roles_at_users
+no, yes
+users
+
+
+php artisan migrate:fresh --seed
+
+Artisan:Make Seeder
+UserSeeder
+
+
+composer require laravel/fortify
+
+
+Artisan:make faktory
+SoalFactory
+y
+Soal
+
+
+SoalSeeder
+
+
+UjianFactory
+y
+u
+Ujian
+
+UjianSoalListFactory
+yes
+UjianSoalList

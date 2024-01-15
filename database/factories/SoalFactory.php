@@ -17,13 +17,13 @@ class SoalFactory extends Factory
     public function definition(): array
     {
         return [
-            'pertanyaan'=>  $this->faker->text(),
-            'kategori'=>  $this->faker->randomElement(['Numeric','Verbal','Logika']),
-            'jawaban_a'=>  $this->faker->word(),
-            'jawaban_b'=>  $this->faker->word(),
-            'jawaban_c'=>  $this->faker->word(),
-            'jawaban_d'=>  $this->faker->word(),
-            'kunci'=>  $this->faker->randomElement(['a','b','c','d']),
+            'pertanyaan' => $this->faker->text(),
+            'kategori' => $this->faker->randomElement(['Numeric','Verbal','Logika']),
+            'jawaban_a' => $this->faker->word(),
+            'jawaban_b' => $this->faker->word(),
+            'jawaban_c' => $this->faker->word(),
+            'jawaban_d' => $this->faker->word(),
+            'kunci'=> $this->faker->randomElement(['a','b','c','d']),
         ];
     }
 }

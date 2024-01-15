@@ -71,39 +71,40 @@
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
-                                        @foreach ($users as $user)
+                                        @foreach ($users as $u)
                                             <tr>
-
-                                                <td>
-                                                    {{ $user->name }}
-                                                </td>
-                                                <td>
-                                                    {{ $user->email }}
-                                                </td>
-                                                <td>
-                                                    {{ $user->phone }}
-                                                </td>
-                                                <td>{{ $user->created_at }} </td>
+                                                <td>{{ $u->name }}</td>
+                                                <td>{{ $u->email }}</td>
+                                                <td>{{ $u->phone }}</td>
+                                                <td>{{ $u->created_at }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
-                                                        <a href="{{ route('user.edit', $user->id) }}"
-                                                            class="btn btn-sm btn-info btn-icon"><i
-                                                                class="fas fa-edit"></i>Edit</a>
 
-                                                        <form action="{{ route('user.destroy', $user->id) }}" method="POST"
+                                                        <a href="{{ route('user.edit', $u->id) }}"
+                                                            class="btn btn-primary btn-action mr-1" data-toggle="tooltip"
+                                                            title="Edit">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <form action="{{ route('user.destroy', $u->id) }}" method="post"
                                                             class="ml-2">
-                                                            <input type="hidden" name="_method" value="DELETE" />
-                                                            <input type="hidden" name="_token"
-                                                                value="{{ csrf_token() }}" />
-                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                                <i class="fas fa-times"></i> Delete
-                                                            </button>
-                                                        </form>
-                                                    </div>
 
+
+
+                                                            <input type="hidden" name="_method" value="DELETE">
+
+                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
+                                                                <i class="fas fa-times"></i>Delete
+                                                            </button>
+
+                                                        </form>
+
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
+
 
                                     </table>
                                 </div>
@@ -124,5 +125,5 @@
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 
     <!-- Page Specific JS File -->
-    <script src="{{ asset('js/page/features-Users.js') }}"></script>
+    <script src="{{ asset('js/page/features-posts.js') }}"></script>
 @endpush

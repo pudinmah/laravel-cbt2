@@ -20,22 +20,27 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Registter
-Route::post('/register',[AuthController::class,'register']);
 
-//login
-Route::post('/login',[AuthController::class,'login']);
+// register
+Route::post('/register', [AuthController::class,'register']);
 
+// login
+Route::post('/login', [AuthController::class,'login']);
 
 // logout
-Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
+Route::post('/logout', [AuthController::class,'logout'])->middleware('auth:sanctum');
 
+// create ujian
+Route::post('/create-ujian', [UjianController::class,'createUjian'])->middleware('auth:sanctum');
 
-// CREATE UJIAN
-Route::post('/create-ujian',[UjianController::class,'createUjian'])->middleware('auth:sanctum');
+// get soal ujian
+Route::get('/get-soal-ujian', [UjianController::class,'getListSoalByKategori'])->middleware('auth:sanctum');
 
-// GET SOAL UJIAN
-Route::get('/get-soal-ujian',[UjianController::class,'getListSoalByKategori'])->middleware('auth:sanctum');
+// post jawaban
+Route::post('/answers', [UjianController::class,'jawabSoal'])->middleware('auth:sanctum');
 
-// POST JAWABAN
-Route::post('/answers',[UjianController::class,'jawabSoal'])->middleware('auth:sanctum');
+// api content
+Route::apiResource('contents', \App\Http\Controllers\Api\ContentController::class)->middleware('auth:sanctum');
+
+// api materi
+Route::apiResource('materis', \App\Http\Controllers\Api\ContentController::class)->middleware('auth:sanctum');

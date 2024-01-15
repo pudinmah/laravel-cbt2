@@ -12,7 +12,6 @@ class SoalSeeder extends Seeder
      */
     public function run(): void
     {
-        // seeder for soal
         \App\Models\Soal::factory(100)->create();
     }
 }

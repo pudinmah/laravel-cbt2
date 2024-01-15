@@ -8,6 +8,7 @@ use App\Models\Soal;
 use App\Models\Ujian;
 use App\Models\UjianSoalList;
 use Illuminate\Http\Request;
+use Illuminate\Queue\Events\Looping;
 
 class UjianController extends Controller
 {
@@ -51,48 +52,47 @@ class UjianController extends Controller
         //
     }
 
-
-    // CREATE UJIAN
+    // create ujian
     public function createUjian(Request $request)
     {
-        // get 20 soal angka random unique
+        // get 20 soal angka random
         $soalAngka = Soal::where('kategori', 'Numeric')->inRandomOrder()->limit(20)->get();
-        // get 20 soal VERBAL random
+        // get 20 soal angka random
         $soalVerbal = Soal::where('kategori', 'Verbal')->inRandomOrder()->limit(20)->get();
-        // get 20 soal LOGIKA random
+        // get 20 soal angka random
         $soalLogika = Soal::where('kategori', 'Logika')->inRandomOrder()->limit(20)->get();
 
-        // CREATE UJIAN
+        // create ujian
         $ujian = Ujian::create([
-            'user_id' => $request->user()->id,
+            'user_id'=> $request->user()->id,
         ]);
 
-        // SOAL ANGKA
-        foreach ($soalAngka as $soal) {
+        // Looping Soal Angka
+        foreach ($soalAngka as $soal)
+        {
             UjianSoalList::create([
-                'ujian_id' => $ujian->id,
+                'ujian_id'=> $ujian->id,
                 'soal_id' => $soal->id,
             ]);
         }
-
-        // SOAL VERBAL
-        foreach ($soalVerbal as $soal) {
+        // Looping Soal Verbal
+        foreach ($soalVerbal as $soal)
+        {
             UjianSoalList::create([
-                'ujian_id' => $ujian->id,
+                'ujian_id'=> $ujian->id,
                 'soal_id' => $soal->id,
             ]);
         }
-
-        // SOAL LOGIKA
-        foreach ($soalLogika as $soal) {
+        // Looping Soal Logika
+        foreach ($soalLogika as $soal)
+        {
             UjianSoalList::create([
-                'ujian_id' => $ujian->id,
+                'ujian_id'=> $ujian->id,
                 'soal_id' => $soal->id,
             ]);
         }
-
         return response()->json([
-            'message' => 'Ujian berhasil dibuat',
+            'message'=> 'Ujian berhasil dibuat',
             'data' => $ujian,
         ]);
     }
@@ -102,35 +102,28 @@ class UjianController extends Controller
     {
         $ujian = Ujian::where('user_id', $request->user()->id)->first();
         $ujianSoalList = UjianSoalList::where('ujian_id', $ujian->id)->get();
-        $soalIds = $ujianSoalList->pluck('soal_id');
-
-        dd($soalIds);
-
-        $soal = Soal::whereIn('id', $soalIds)->where('kategori', $request->kategori)->get();
 
 
+        $ujianSoalListId = [];
+        foreach ($ujianSoalList as $soal)
+        {
+            array_push($ujianSoalListId, $soal->soal_id);
+        }
 
-        // $ujianSoalListId = [];
-
-        // foreach ($ujianSoalList as $soal) {
-        //     array_push($ujianSoalListId, $soal->soal_id);
-        // }
-
-        // $soal = Soal::whereIn('id', $ujianSoalListId)->where('kategori', $request->kategori)->get();
+        $soal = Soal::whereIn('id', $ujianSoalListId)->where('kategori', $request->kategori)->get();
 
         return response()->json([
-            'message' => 'Berhasil mendapatkan soal',
-            // 'data' => $soal,
-            'data' => SoalResource::collection($soal),
+            'message'=> 'Berhasil mendapatkan soal',
+            'data'=> SoalResource::collection($soal),
         ]);
     }
 
-    // jawab soal
+    // Jawab soal
     public function jawabSoal(Request $request)
     {
         $validatedData = $request->validate([
-            'soal_id' => 'required',
-            'jawaban' => 'required',
+            'soal_id'=> 'required',
+            'jawaban'=> 'required',
         ]);
 
 
@@ -138,29 +131,20 @@ class UjianController extends Controller
         $ujianSoalList = UjianSoalList::where('ujian_id', $ujian->id)->where('soal_id', $validatedData['soal_id'])->first();
         $soal = Soal::where('id', $validatedData['soal_id'])->first();
 
-        // CEK JAWABAN
-        if ($soal->kunci == $validatedData['jawaban']) {
-            $ujianSoalList->update(
-                [
-                    'kebenaran' => true
-                ]
-            );
-            // $ujianSoalList->kebenaran = true;
-            // $ujianSoalList->save();
+        // cek jawaban
+        if ($soal->kunci == $validatedData['jawaban'])
+        {
+            $ujianSoalList->kebenaran = true;
+            $ujianSoalList->save();
         } else {
-            $ujianSoalList->update(
-                [
-                    'kebenaran' => false,
-                ]
-            );
-            // $ujianSoalList->kebenaran = false;
-            // $ujianSoalList->save();
+            $ujianSoalList->kebenaran = false;
+            $ujianSoalList->save();
         }
 
         return response()->json([
-            'message' => 'Berhasil Simpan jawaban',
-            'jawaban' => $ujianSoalList->kebenaran,
-
+            'message'=> 'Berhasil simpan jawaban',
+            'jawaban'=> $ujianSoalList->kebenaran,
         ]);
     }
+
 }

@@ -22,14 +22,13 @@ class StoreSoalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-            'pertanyaan'=>  'required|max:255',
-            'kategori'=>  'required|in:Numeric,Verbal,Logika',
-            'jawaban_a'=>  'required|max:255',
-            'jawaban_b'=>  'required|max:255',
-            'jawaban_c'=>  'required|max:255',
-            'jawaban_d'=>  'required|max:255',
-            'kunci'=>  'required|in:a,b,c,d'
+            'pertanyaan' => 'required|max:255',
+            'kategori' => 'required|in:Numeric,Verbal,Logika',
+            'jawaban_a' => 'required|max:255',
+            'jawaban_b' => 'required|max:255',
+            'jawaban_c' => 'required|max:255',
+            'jawaban_d' => 'required|max:255',
+            'kunci'=> 'required|in:a,b,c,d',
         ];
     }
 }

@@ -64,35 +64,32 @@ class UjianController extends Controller
 
         // create ujian
         $ujian = Ujian::create([
-            'user_id'=> $request->user()->id,
+            'user_id' => $request->user()->id,
         ]);
 
         // Looping Soal Angka
-        foreach ($soalAngka as $soal)
-        {
+        foreach ($soalAngka as $soal) {
             UjianSoalList::create([
-                'ujian_id'=> $ujian->id,
+                'ujian_id' => $ujian->id,
                 'soal_id' => $soal->id,
             ]);
         }
         // Looping Soal Verbal
-        foreach ($soalVerbal as $soal)
-        {
+        foreach ($soalVerbal as $soal) {
             UjianSoalList::create([
-                'ujian_id'=> $ujian->id,
+                'ujian_id' => $ujian->id,
                 'soal_id' => $soal->id,
             ]);
         }
         // Looping Soal Logika
-        foreach ($soalLogika as $soal)
-        {
+        foreach ($soalLogika as $soal) {
             UjianSoalList::create([
-                'ujian_id'=> $ujian->id,
+                'ujian_id' => $ujian->id,
                 'soal_id' => $soal->id,
             ]);
         }
         return response()->json([
-            'message'=> 'Ujian berhasil dibuat',
+            'message' => 'Ujian berhasil dibuat',
             'data' => $ujian,
         ]);
     }
@@ -105,16 +102,15 @@ class UjianController extends Controller
 
 
         $ujianSoalListId = [];
-        foreach ($ujianSoalList as $soal)
-        {
+        foreach ($ujianSoalList as $soal) {
             array_push($ujianSoalListId, $soal->soal_id);
         }
 
         $soal = Soal::whereIn('id', $ujianSoalListId)->where('kategori', $request->kategori)->get();
 
         return response()->json([
-            'message'=> 'Berhasil mendapatkan soal',
-            'data'=> SoalResource::collection($soal),
+            'message' => 'Berhasil mendapatkan soal',
+            'data' => SoalResource::collection($soal),
         ]);
     }
 
@@ -122,18 +118,27 @@ class UjianController extends Controller
     public function jawabSoal(Request $request)
     {
         $validatedData = $request->validate([
-            'soal_id'=> 'required',
-            'jawaban'=> 'required',
+            'soal_id' => 'required',
+            'jawaban' => 'required',
         ]);
 
 
         $ujian = Ujian::where('user_id', $request->user()->id)->first();
+        //if ujian not found return empty
+        if (!$ujian) {
+            return response()->json([
+                'message' => 'Ujian tidak ditemukan',
+                'data' => [],
+            ], 200); //404
+        }
+
         $ujianSoalList = UjianSoalList::where('ujian_id', $ujian->id)->where('soal_id', $validatedData['soal_id'])->first();
         $soal = Soal::where('id', $validatedData['soal_id'])->first();
 
+
+
         // cek jawaban
-        if ($soal->kunci == $validatedData['jawaban'])
-        {
+        if ($soal->kunci == $validatedData['jawaban']) {
             $ujianSoalList->kebenaran = true;
             $ujianSoalList->save();
         } else {
@@ -142,8 +147,8 @@ class UjianController extends Controller
         }
 
         return response()->json([
-            'message'=> 'Berhasil simpan jawaban',
-            'jawaban'=> $ujianSoalList->kebenaran,
+            'message' => 'Berhasil simpan jawaban',
+            'jawaban' => $ujianSoalList->kebenaran,
         ]);
     }
 
@@ -156,7 +161,7 @@ class UjianController extends Controller
             return response()->json([
                 'message' => 'Ujian tidak ditemukan',
                 'data' => [],
-            ], 200);
+            ], 200); //404
         }
         $ujianSoalList = UjianSoalList::where('ujian_id', $ujian->id)->get();
 
@@ -197,5 +202,4 @@ class UjianController extends Controller
             'nilai' => $nilai,
         ], 200);
     }
-
 }

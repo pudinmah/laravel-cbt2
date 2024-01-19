@@ -198,7 +198,7 @@ class UjianController extends Controller
             $timer_field = 'timer_logika';
         }
 
-        // update nilai
+        // update nilai, status, timer
         $ujian->update([
             $kategori_field => $nilai,
             $status_field => 'done',
